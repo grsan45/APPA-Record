@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
     sock.connect("tcp://localhost:42069");
     sock.set(zmq::sockopt::subscribe, "record");
     sock.set(zmq::sockopt::rcvtimeo, 0);
+    sock.set(zmq::sockopt::connect_timeout, 2147483647);
 
     // create our capture devices
     CaptureDevice capture_device_a(0, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output.mkv");
