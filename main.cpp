@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
     sock.set(zmq::sockopt::subscribe, "record");
     sock.set(zmq::sockopt::rcvtimeo, 0);
 
-    printf("%s", sock.get(zmq::sockopt::subscribe).c_str());
-    printf("%d", sock.get(zmq::sockopt::rcvtimeo));
+    auto rid = sock.get(zmq::sockopt::subscribe);
+    printf("%s", rid.c_str());
 
     // create our capture devices
 //    CaptureDevice capture_device_a(0, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output.mkv");
