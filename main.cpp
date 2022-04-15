@@ -33,6 +33,8 @@ int main(int argc, char** argv) {
 //    std::this_thread::sleep_for(sleep_for);
     zmq::message_t recv;
     while(true) {
+        auto timeout = sock.get(zmq::sockopt::connect_timeout);
+        printf("%d", timeout);
         auto res = sock.recv(recv);
         if (res.has_value()) {
             if (recv.to_string() == "record start")
