@@ -22,11 +22,8 @@ int main(int argc, char** argv) {
     sock.set(zmq::sockopt::subscribe, "record");
     sock.set(zmq::sockopt::rcvtimeo, 0);
 
-    auto rid = sock.get(zmq::sockopt::rcvtimeo);
-    printf("%d", rid);
-
     // create our capture devices
-//    CaptureDevice capture_device_a(0, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output.mkv");
+    CaptureDevice capture_device_a(0, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output.mkv");
 //    CaptureDevice capture_device_b(1, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output2.mkv");
 
     printf("Sleeping until launch signal received\n");
@@ -52,7 +49,7 @@ int main(int argc, char** argv) {
     auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
     // start capture
-//    capture_device_a.start_capture_thread(run_time);
+    capture_device_a.start_capture_thread(run_time);
 //    capture_device_b.start_capture_thread(run_time);
 
     // wait until capture should be done
@@ -71,11 +68,11 @@ int main(int argc, char** argv) {
 
     // stop capture
     printf("\nDone capturing\n");
-//    capture_device_a.join_capture_thread();
+    capture_device_a.join_capture_thread();
 //    capture_device_b.join_capture_thread();
 
     // release devices
-//    capture_device_a.release();
+    capture_device_a.release();
 //    capture_device_b.release();
 
     return 0;
