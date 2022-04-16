@@ -1,7 +1,9 @@
 #include <cstdio>
 #include <thread>
 
+#ifdef ZMQ_ENABLED
 #include <zmq.hpp>
+#endif
 
 #include "CaptureDevice.h"
 
