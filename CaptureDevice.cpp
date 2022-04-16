@@ -95,12 +95,13 @@ void CaptureDevice::start_write_thread() {
                         frame_queue.pop();
                         frame_num++;
                     }
+                    printf("Done writing images.\n");
                     for (int i = 0; i < frame_num; i++) {
                         cv::Mat frame = cv::imread(format(image_dir + "/frame-%d.png", i));
                         writer.write(frame);
                         frame.release();
                     }
-                    printf("Done writing.\n");
+                    printf("Done writing video.\n");
                });
 }
 

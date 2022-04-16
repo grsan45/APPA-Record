@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     sock.set(zmq::sockopt::connect_timeout, 0);
 
     // create our capture devices
-    CaptureDevice capture_device_a(0, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output.mkv");
+    CaptureDevice capture_device_a(0, 1280, 720, FPS, "../recordings/output.mkv");
 //    CaptureDevice capture_device_b(1, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output2.mkv");
 
     printf("Sleeping until launch signal received\n");
