@@ -31,11 +31,7 @@ int main(int argc, char** argv) {
     CaptureDevice capture_device_b(1, 1280, 720, FPS, "../recordings/output2.mkv");
 #endif
 
-#ifndef ZMQ_ENABLED
-    printf("Sleeping for %d seconds until recording", std::stoi(argv[1]) * 1000);
-    auto sleep_for = std::chrono::milliseconds(std::stoi(argv[1]) * 1000);
-    std::this_thread::sleep_for(sleep_for);
-#elifdef ZMQ_ENABLED
+#ifdef ZMQ_ENABLED
     zmq::message_t recv;
     while(true) {
         auto res = sock.recv(recv);
@@ -44,6 +40,10 @@ int main(int argc, char** argv) {
                 break;
         }
     }
+#else
+    printf("Sleeping for %d seconds until recording", std::stoi(argv[1]) * 1000);
+    auto sleep_for = std::chrono::milliseconds(std::stoi(argv[1]) * 1000);
+    std::this_thread::sleep_for(sleep_for);
 #endif
 
     printf("Recording for %s seconds\n", argv[2]);
