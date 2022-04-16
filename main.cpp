@@ -72,8 +72,10 @@ int main(int argc, char** argv) {
         // check if another process has signaled the record to end
         auto res = sock.recv(recv);
         if (res.has_value()) {
-            if (recv.to_string() == "record end")
+            if (recv.to_string() == "record end") {
+                printf("Received stop signal.\n");
                 break;
+            }
         }
 #endif
     }
