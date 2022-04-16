@@ -89,7 +89,7 @@ void CaptureDevice::start_write_thread() {
                         if (frame.empty())
                             continue;
 
-                        cv::imwrite(format(image_dir + "/frame-%d.jpg", frame_num), frame);
+                        cv::imwrite(format(image_dir + "/frame-%d.ppm", frame_num), frame);
 
                         frame.release();
                         frame_queue.pop();
@@ -98,7 +98,7 @@ void CaptureDevice::start_write_thread() {
                     }
                     printf("Done writing images.\n");
                     for (int i = 0; i < frame_num; i++) {
-                        cv::Mat frame = cv::imread(format(image_dir + "/frame-%d.jpg", i));
+                        cv::Mat frame = cv::imread(format(image_dir + "/frame-%d.ppm", i));
                         writer.write(frame);
                         frame.release();
                     }
