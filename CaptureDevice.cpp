@@ -9,7 +9,7 @@ namespace fs = std::experimental::filesystem;
 
 CaptureDevice::CaptureDevice(int device_id, int width, int height, unsigned int framerate, const std::string& output_name) {
     //create our pipeline string
-    std::string gstreamer_pipeline = format(std::string("v4l2src device=\"/dev/video0\" ! video/x-bayer,width=1920,height=1080 ! bayer2rgb ! videoconvert ! "
+    std::string gstreamer_pipeline = format(std::string("v4l2src device=\"/dev/video%d\" ! video/x-bayer,width=%d,height=%d ! bayer2rgb ! videoconvert ! "
                                                         "video/x-raw, format=(string)BGR ! appsink"), device_id, width, height, framerate, 0, width, height);
 
     capture = cv::VideoCapture(gstreamer_pipeline);
