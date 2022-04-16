@@ -89,11 +89,12 @@ void CaptureDevice::start_write_thread() {
                         if (frame.empty())
                             continue;
 
-                        cv::imwrite(format(image_dir + "/frame-%d.png", frame_num), frame);
+                        cv::imwrite(format(image_dir + "/frame-%d.jpg", frame_num), frame);
 
                         frame.release();
                         frame_queue.pop();
                         frame_num++;
+                        printf("wrote frame %d\n", frame_num);
                     }
                     printf("Done writing images.\n");
                     for (int i = 0; i < frame_num; i++) {
