@@ -68,7 +68,8 @@ int main(int argc, char** argv) {
     while(current_time < finished_time) {
         // print current record time to console
         current_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        printf("\rRecording... %ld seconds", (current_time - start_time) / 1000);
+        if (current_time - start_time % 1000 == 0)
+            printf("\rRecording... %ld seconds", (current_time - start_time) / 1000);
 
 #ifdef ZMQ_ENABLED
         // check if another process has signaled the record to end
