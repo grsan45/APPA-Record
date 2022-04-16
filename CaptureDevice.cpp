@@ -124,7 +124,7 @@ void CaptureDevice::start_im_write_thread() {
                         frame.release();
                         frame_queue.pop();
                         frame_num++;
-//                        printf("wrote frame %d, frame queue size: %lu\n", frame_num, frame_queue.size());
+                        printf("wrote frame %d, frame queue size: %lu\n", frame_num, frame_queue.size());
                     }
                     printf("Done writing images.\n");
                     for (int i = 0; i < frame_num; i++) {
