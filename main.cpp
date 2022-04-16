@@ -91,6 +91,7 @@ int main(int argc, char** argv) {
     // release devices
 #ifdef ZMQ_ENABLED
     capture_device_a.release();
+    sock.close();
 #else
     capture_device_b.release();
 #endif
