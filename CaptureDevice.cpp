@@ -9,7 +9,7 @@ namespace fs = std::experimental::filesystem;
 
 CaptureDevice::CaptureDevice(int device_id, int width, int height, unsigned int framerate, const std::string& output_name) {
     //create our pipeline string
-    std::string gstreamer_pipeline = format(std::string("nvv4l2camerasrc sensor-id=%d !"
+    std::string gstreamer_pipeline = format(std::string("nvarguscamerasrc sensor-id=%d !"
                                                         "video/x-raw(memory:NVMM), width=(int)%d, height=(int)%d, fps=(fraction)%d/1 ! "
                                                         "nvvidconv flip-method=%d ! "
                                                         "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
