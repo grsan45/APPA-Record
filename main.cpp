@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
         }
     }
 #else
-    printf("Sleeping for %d seconds until recording", std::stoi(argv[1]) * 1000);
+    printf("Sleeping for %d seconds until recording\n", std::stoi(argv[1]));
     auto sleep_for = std::chrono::milliseconds(std::stoi(argv[1]) * 1000);
     std::this_thread::sleep_for(sleep_for);
 #endif

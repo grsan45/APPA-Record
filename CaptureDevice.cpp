@@ -97,11 +97,12 @@ void CaptureDevice::start_write_thread() {
                     }
                     printf("Done writing images.\n");
                     for (int i = 0; i < frame_num; i++) {
-                        cv::Mat frame = cv::imread(format(image_dir + "/frame-%d.png", i));
+                        cv::Mat frame = cv::imread(format(image_dir + "/frame-%d.jpg", i));
                         writer.write(frame);
                         frame.release();
                     }
                     printf("Done writing video.\n");
+                    writer.release();
                });
 }
 
@@ -121,5 +122,4 @@ void CaptureDevice::kill() {
 void CaptureDevice::release() {
     printf("Releasing capture & writer\n");
     capture.release();
-    writer.release();
 }
