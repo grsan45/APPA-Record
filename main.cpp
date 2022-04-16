@@ -13,6 +13,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+#ifdef ZMQ_ENABLED
     // create out zmq context
     zmq::context_t zmq_ctx;
     zmq::socket_t sock(zmq_ctx, zmq::socket_type::sub);
@@ -22,15 +23,19 @@ int main(int argc, char** argv) {
     sock.set(zmq::sockopt::subscribe, "record");
     sock.set(zmq::sockopt::rcvtimeo, 0);
     sock.set(zmq::sockopt::connect_timeout, 0);
-
     // create our capture devices
     CaptureDevice capture_device_a(0, 1280, 720, FPS, "../recordings/output.mkv");
-//    CaptureDevice capture_device_b(1, 1280, 720, FPS, "/home/homie/Desktop/dev/APPA_record/recordings/output2.mkv");
 
     printf("Sleeping until launch signal received\n");
+#else
+    CaptureDevice capture_device_b(1, 1280, 720, FPS, "../recordings/output2.mkv");
+#endif
 
-//    auto sleep_for = std::chrono::milliseconds(std::stoi(argv[1]) * 1000);
-//    std::this_thread::sleep_for(sleep_for);
+#ifndef ZMQ_ENABLED
+    printf("Sleeping for %d seconds until recording", std::stoi(argv[1]) * 1000);
+    auto sleep_for = std::chrono::milliseconds(std::stoi(argv[1]) * 1000);
+    std::this_thread::sleep_for(sleep_for);
+#elifdef ZMQ_ENABLED
     zmq::message_t recv;
     while(true) {
         auto res = sock.recv(recv);
@@ -39,6 +44,7 @@ int main(int argc, char** argv) {
                 break;
         }
     }
+#endif
 
     printf("Recording for %s seconds\n", argv[2]);
 
@@ -50,8 +56,11 @@ int main(int argc, char** argv) {
     auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
     // start capture
+#ifdef ZMQ_ENABLED
     capture_device_a.start_capture_thread(run_time);
-//    capture_device_b.start_capture_thread(run_time);
+#else
+    capture_device_b.start_capture_thread(run_time);
+#endif
 
     // wait until capture should be done
     while(current_time < finished_time) {
@@ -59,22 +68,30 @@ int main(int argc, char** argv) {
         current_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         printf("\rRecording... %ld seconds", (current_time - start_time) / 1000);
 
+#ifdef ZMQ_ENABLED
         // check if another process has signaled the record to end
         auto res = sock.recv(recv);
         if (res.has_value()) {
             if (recv.to_string() == "record end")
                 break;
         }
+#endif
     }
 
     // stop capture
     printf("\nDone capturing\n");
+#ifdef ZMQ_ENABLED
     capture_device_a.join_capture_thread();
-//    capture_device_b.join_capture_thread();
+#else
+    capture_device_b.join_capture_thread();
+#endif
 
     // release devices
+#ifdef ZMQ_ENABLED
     capture_device_a.release();
-//    capture_device_b.release();
+#else
+    capture_device_b.release();
+#endif
 
     return 0;
 }

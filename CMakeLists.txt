@@ -25,3 +25,7 @@ include_directories(${OPENCV_INCLUDE_DIRS} ${ZeroMQ_INCLUDE_DIRS})
 
 add_executable(APPA_record main.cpp CaptureDevice.cpp CaptureDevice.h utils.h)
 target_link_libraries(APPA_record ${OpenCV_LIBS} ${ZeroMQ_LIBRARY} Threads::Threads stdc++fs)
+target_compile_definitions(APPA_record ZMQ_ENABLED)
+
+add_executable(APPA_record_standalone main.cpp CaptureDevice.cpp CaptureDevice.h utils.h)
+target_link_libraries(APPA_record_standalone ${OpenCV_LIBS} ${ZeroMQ_LIBRARY} Threads::Threads stdc++fs)
