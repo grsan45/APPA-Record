@@ -34,7 +34,8 @@ private:
 
     std::string image_dir;
 
-    void start_write_thread();
+    void start_im_write_thread();
+    void start_video_write_thread();
 };
 
 

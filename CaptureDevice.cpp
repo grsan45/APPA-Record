@@ -70,11 +70,41 @@ void CaptureDevice::start_capture_thread(unsigned int run_time) {
                     }
                 });
     printf("Staring writer thread\n");
-    start_write_thread();
+#ifdef ZMQ_ENABLED
+    start_video_write_thread();
+#else
+    start_im_write_thread();
+#endif
 }
 
-void CaptureDevice::start_write_thread() {
-    write_thread = std::thread([this]()
+void CaptureDevice::start_video_write_thread() {
+    this->write_thread = std::thread([this]()
+               {
+                   while(!frame_queue.empty() || !finished) {
+                       if (killed)
+                           break;
+
+                       if (frame_queue.empty())
+                           continue;
+
+                       cv::Mat frame = frame_queue.front();
+
+                       if (frame.empty())
+                           continue;
+
+                       writer.write(frame);
+
+                       frame.release();
+                       frame_queue.pop();
+//                        printf("wrote frame %d, frame queue size: %lu\n", frame_num, frame_queue.size());
+                   }
+                   printf("Done writing video.\n");
+                   writer.release();
+               });
+}
+
+void CaptureDevice::start_im_write_thread() {
+    this->write_thread = std::thread([this]()
                {
                     int frame_num = 0;
                     while(!frame_queue.empty() || !finished) {
@@ -89,7 +119,7 @@ void CaptureDevice::start_write_thread() {
                         if (frame.empty())
                             continue;
 
-                        cv::imwrite(format(image_dir + "/frame-%d.bmp", frame_num), frame);
+                        cv::imwrite(format(image_dir + "/frame-%d.jpg", frame_num), frame);
 
                         frame.release();
                         frame_queue.pop();
@@ -98,7 +128,7 @@ void CaptureDevice::start_write_thread() {
                     }
                     printf("Done writing images.\n");
                     for (int i = 0; i < frame_num; i++) {
-                        cv::Mat frame = cv::imread(format(image_dir + "/frame-%d.bmp", i));
+                        cv::Mat frame = cv::imread(format(image_dir + "/frame-%d.jpg", i));
                         writer.write(frame);
                         frame.release();
                     }

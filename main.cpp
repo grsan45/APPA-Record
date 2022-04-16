@@ -7,7 +7,8 @@
 
 #include "CaptureDevice.h"
 
-#define FPS 24
+#define FPS 30
+#define BACKUP_FPS 5
 
 int main(int argc, char** argv) {
     if (argc != 3) {
@@ -30,7 +31,7 @@ int main(int argc, char** argv) {
 
     printf("Sleeping until launch signal received\n");
 #else
-    CaptureDevice capture_device_b(1, 1280, 720, FPS, "../recordings/output2.mkv");
+    CaptureDevice capture_device_b(1, 1280, 720, BACKUP_FPS, "../recordings/output2.mkv");
 #endif
 
 #ifdef ZMQ_ENABLED
