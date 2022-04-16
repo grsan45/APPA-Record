@@ -7,7 +7,7 @@
 
 #include "CaptureDevice.h"
 
-#define FPS 30
+#define FPS 24
 
 int main(int argc, char** argv) {
     if (argc != 3) {
